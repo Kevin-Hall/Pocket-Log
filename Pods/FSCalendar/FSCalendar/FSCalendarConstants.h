@@ -13,29 +13,30 @@
 
 #pragma mark - Constants
 
-UIKIT_EXTERN CGFloat const FSCalendarStandardHeaderHeight;
-UIKIT_EXTERN CGFloat const FSCalendarStandardWeekdayHeight;
-UIKIT_EXTERN CGFloat const FSCalendarStandardMonthlyPageHeight;
-UIKIT_EXTERN CGFloat const FSCalendarStandardWeeklyPageHeight;
-UIKIT_EXTERN CGFloat const FSCalendarStandardCellDiameter;
-UIKIT_EXTERN CGFloat const FSCalendarStandardSeparatorThickness;
-UIKIT_EXTERN CGFloat const FSCalendarAutomaticDimension;
-UIKIT_EXTERN CGFloat const FSCalendarDefaultBounceAnimationDuration;
-UIKIT_EXTERN CGFloat const FSCalendarStandardRowHeight;
-UIKIT_EXTERN CGFloat const FSCalendarStandardTitleTextSize;
-UIKIT_EXTERN CGFloat const FSCalendarStandardSubtitleTextSize;
-UIKIT_EXTERN CGFloat const FSCalendarStandardWeekdayTextSize;
-UIKIT_EXTERN CGFloat const FSCalendarStandardHeaderTextSize;
-UIKIT_EXTERN CGFloat const FSCalendarMaximumEventDotDiameter;
-UIKIT_EXTERN CGFloat const FSCalendarStandardScopeHandleHeight;
+CG_EXTERN CGFloat const FSCalendarStandardHeaderHeight;
+CG_EXTERN CGFloat const FSCalendarStandardWeekdayHeight;
+CG_EXTERN CGFloat const FSCalendarStandardMonthlyPageHeight;
+CG_EXTERN CGFloat const FSCalendarStandardWeeklyPageHeight;
+CG_EXTERN CGFloat const FSCalendarStandardCellDiameter;
+CG_EXTERN CGFloat const FSCalendarStandardSeparatorThickness;
+CG_EXTERN CGFloat const FSCalendarAutomaticDimension;
+CG_EXTERN CGFloat const FSCalendarDefaultBounceAnimationDuration;
+CG_EXTERN CGFloat const FSCalendarStandardRowHeight;
+CG_EXTERN CGFloat const FSCalendarStandardTitleTextSize;
+CG_EXTERN CGFloat const FSCalendarStandardSubtitleTextSize;
+CG_EXTERN CGFloat const FSCalendarStandardWeekdayTextSize;
+CG_EXTERN CGFloat const FSCalendarStandardHeaderTextSize;
+CG_EXTERN CGFloat const FSCalendarMaximumEventDotDiameter;
 
 UIKIT_EXTERN NSInteger const FSCalendarDefaultHourComponent;
+UIKIT_EXTERN NSInteger const FSCalendarMaximumNumberOfEvents;
 
 UIKIT_EXTERN NSString * const FSCalendarDefaultCellReuseIdentifier;
+UIKIT_EXTERN NSString * const FSCalendarBlankCellReuseIdentifier;
 UIKIT_EXTERN NSString * const FSCalendarInvalidArgumentsExceptionName;
 
-#define CGPointInfinity CGPointMake(NSIntegerMax,NSIntegerMax)
-#define CGSizeAutomatic CGSizeMake(FSCalendarAutomaticDimension,FSCalendarAutomaticDimension)
+CG_EXTERN CGPoint const CGPointInfinity;
+CG_EXTERN CGSize const CGSizeAutomatic;
 
 #if TARGET_INTERFACE_BUILDER
 #define FSCalendarDeviceIsIPad NO
@@ -50,22 +51,18 @@ UIKIT_EXTERN NSString * const FSCalendarInvalidArgumentsExceptionName;
 
 #define FSCalendarStandardLineColor        [[UIColor lightGrayColor] colorWithAlphaComponent:0.30]
 #define FSCalendarStandardSeparatorColor   [[UIColor lightGrayColor] colorWithAlphaComponent:0.60]
-#define FSCalendarStandardScopeHandleColor [[UIColor lightGrayColor] colorWithAlphaComponent:0.50]
 
 #define FSColorRGBA(r,g,b,a) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
 #define FSCalendarInAppExtension [[[NSBundle mainBundle] bundlePath] hasSuffix:@".appex"]
 
-#if CGFLOAT_IS_DOUBLE
-#define FSCalendarFloor(c) floor(c)
-#define FSCalendarRound(c) round(c)
-#define FSCalendarCeil(c) ceil(c)
-#define FSCalendarMod(c1,c2) fmod(c1,c2)
-#else
 #define FSCalendarFloor(c) floorf(c)
 #define FSCalendarRound(c) roundf(c)
 #define FSCalendarCeil(c) ceilf(c)
 #define FSCalendarMod(c1,c2) fmodf(c1,c2)
-#endif
+
+#define FSCalendarHalfRound(c) (FSCalendarRound(c*2)*0.5)
+#define FSCalendarHalfFloor(c) (FSCalendarFloor(c*2)*0.5)
+#define FSCalendarHalfCeil(c) (FSCalendarCeil(c*2)*0.5)
 
 #define FSCalendarUseWeakSelf __weak __typeof__(self) FSCalendarWeakSelf = self;
 #define FSCalendarUseStrongSelf __strong __typeof__(self) self = FSCalendarWeakSelf;
@@ -75,14 +72,15 @@ UIKIT_EXTERN NSString * const FSCalendarInvalidArgumentsExceptionName;
 
 #define FSCalendarDeprecated(instead) DEPRECATED_MSG_ATTRIBUTE(" Use " # instead " instead")
 
-FSCalendarDeprecated('borderRadius')
-typedef NS_ENUM(NSUInteger, FSCalendarCellShape) {
-    FSCalendarCellShapeCircle    = 0,
-    FSCalendarCellShapeRectangle = 1
-};
+static inline void FSCalendarSliceCake(CGFloat cake, NSInteger count, CGFloat *pieces) {
+    CGFloat total = cake;
+    for (int i = 0; i < count; i++) {
+        NSInteger remains = count - i;
+        CGFloat piece = FSCalendarRound(total/remains*2)*0.5;
+        total -= piece;
+        pieces[i] = piece;
+    }
+}
 
-typedef NS_ENUM(NSUInteger, FSCalendarUnit) {
-    FSCalendarUnitMonth = NSCalendarUnitMonth,
-    FSCalendarUnitWeekOfYear = NSCalendarUnitWeekOfYear,
-    FSCalendarUnitDay = NSCalendarUnitDay
-};
+
+

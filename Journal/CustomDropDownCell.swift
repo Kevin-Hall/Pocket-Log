@@ -7,3 +7,9 @@
 //
 
 import Foundation
+import UIKit
+import DropDown
+
+class CustomDropDownCell: DropDownCell {
+    @IBOutlet weak var suffixLabel: UILabel!
+}

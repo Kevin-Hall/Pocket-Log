@@ -7,5 +7,14 @@ target 'Journal' do
 
   # Pods for Journal
   pod 'FSCalendar'
-
+  pod "Spruce", '~> 1.0.0'
+  pod 'CHTCollectionViewWaterfallLayout/Swift'
+  pod 'CloudCore'
+  pod 'TLPhotoPicker'
+  pod 'DropDown'
+  pod 'Toast-Swift', '~> 3.0.1'
+  pod 'DateTimePicker'
+  pod 'BiometricAuthentication'
+  pod 'SideMenuSwift'
+  
 end

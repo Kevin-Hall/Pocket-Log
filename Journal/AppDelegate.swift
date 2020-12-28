@@ -8,53 +8,46 @@
 
 import UIKit
 import CoreData
+import CloudCore
+
+
+let persistentContainer = (UIApplication.shared.delegate as! AppDelegate).persistentContainer
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    let delegateHandler = CloudCoreDelegateHandler()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         
-        if (UserDefaults.standard.string(forKey: "darkMode")) != nil {
-            // do nothing cause the user already set the color
-            
-            fontSize = CGFloat(UserDefaults.standard.integer(forKey: "fontSize"))
-            
-            if UserDefaults.standard.string(forKey: "darkMode") == "yes" {
-                //default colors
-                bgColor = UIColor(red: 41/255, green: 41/255, blue: 48/255, alpha: 1)
-                separatorColor = UIColor(red: 151/255, green: 151/255, blue: 151/255, alpha: 0.26)
-                textColor = UIColor.white
-                dateColor = UIColor(rgb: 0x53C8F9).withAlphaComponent(0.5)
-                todayDateColor = UIColor(rgb: 0x53C8F9)
-            } else {
-                //default colors
-                bgColor = UIColor(rgb: 0xffffff)
-                separatorColor = UIColor(rgb: 0xDCE2E6)
-                textColor = UIColor(red: 41/255, green: 41/255, blue: 48/255, alpha: 1)
-                dateColor = UIColor(rgb: 0x53C8F9).withAlphaComponent(0.5)
-                todayDateColor = UIColor(rgb: 0x53C8F9)
-            }
-        } else {
-            UserDefaults.standard.set("yes", forKey: "darkMode")
-            UserDefaults.standard.set(CGFloat(13), forKey: "fontSize")
-            
-            fontSize = CGFloat(UserDefaults.standard.integer(forKey: "fontSize"))
-            
-            //default colors
-            bgColor = UIColor(rgb: 0xffffff)
-            separatorColor = UIColor(rgb: 0xDCE2E6)
-            textColor = UIColor(red: 41/255, green: 41/255, blue: 48/255, alpha: 1)
-            dateColor = UIColor(rgb: 0x53C8F9).withAlphaComponent(0.5)
-            todayDateColor = UIColor(rgb: 0x53C8F9)
-        }
+        UserDefaults.standard.register(defaults: ["DATE_ON_CARD" : false,"ONBOARDING" : false,"COLOR_THEME" : "Cool","NOTIFICATIONS" : false])
+        
+        application.registerForRemoteNotifications()
+        
+        // Enable CloudCore syncing
+        CloudCore.delegate = delegateHandler
+        CloudCore.enable(persistentContainer: persistentContainer)
+        
+        
         
         
         return true
+    }
+    
+    // Notification from CloudKit about changes in remote database
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        // Check if it CloudKit's and CloudCore notification
+        if CloudCore.isCloudCoreNotification(withUserInfo: userInfo) {
+            // Fetch changed data from iCloud
+            CloudCore.pull(using: userInfo, to: persistentContainer, error: nil, completion: { (fetchResult) in
+                print(fetchResult)
+                completionHandler(fetchResult.uiBackgroundFetchResult)
+            })
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -85,6 +78,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
+        
+        // Save tokens on exit used to differential sync
+        CloudCore.tokens.saveToUserDefaults()
     }
 
     // MARK: - Core Data stack
@@ -96,11 +92,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
         */
+        
+        
         let container = NSPersistentContainer(name: "Journal")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                fatalError()
                  
                 /*
                  Typical reasons for an error here include:

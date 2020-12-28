@@ -1,12 +1,52 @@
 PODS:
-  - FSCalendar (2.7.0)
+  - BiometricAuthentication (3.1.2)
+  - CHTCollectionViewWaterfallLayout/Swift (0.9.8)
+  - CloudCore (3.0.1)
+  - DateTimePicker (2.5.0)
+  - DropDown (2.3.13)
+  - FSCalendar (2.8.1)
+  - SideMenuSwift (2.0.6)
+  - Spruce (1.0.0)
+  - TLPhotoPicker (2.1.2)
+  - Toast-Swift (3.0.1)
 
 DEPENDENCIES:
+  - BiometricAuthentication
+  - CHTCollectionViewWaterfallLayout/Swift
+  - CloudCore
+  - DateTimePicker
+  - DropDown
   - FSCalendar
+  - SideMenuSwift
+  - Spruce (~> 1.0.0)
+  - TLPhotoPicker
+  - Toast-Swift (~> 3.0.1)
+
+SPEC REPOS:
+  trunk:
+    - BiometricAuthentication
+    - CHTCollectionViewWaterfallLayout
+    - CloudCore
+    - DateTimePicker
+    - DropDown
+    - FSCalendar
+    - SideMenuSwift
+    - Spruce
+    - TLPhotoPicker
+    - Toast-Swift
 
 SPEC CHECKSUMS:
-  FSCalendar: 4957703ebd99b4fd0bfd46bf3e3c6465c0a25482
+  BiometricAuthentication: 36445f3ab77699489f91995bed887be89890afac
+  CHTCollectionViewWaterfallLayout: 5f241d2480ab4939aa0d1ad4981de9eef1fbe60d
+  CloudCore: 605345ab755affeb1d8320c467d87c7d0aa746a9
+  DateTimePicker: 9a370913607f360b67ecfc7dcf331911c9b407a6
+  DropDown: 8a2116376c1981888557f72ec2ffc9a5e0e456ec
+  FSCalendar: 5245140456fcbcac5824c203b98bd8068bdfee1a
+  SideMenuSwift: f12ca1b11faad909bfc2878df37e0a1c40fa4570
+  Spruce: 07ffdb990923f500111fcbf13d102e16075b230e
+  TLPhotoPicker: 569b457a661c0dc769efb2357e2497a088529b0e
+  Toast-Swift: ba0b01b095aada709d915f9beb1d38184a2721c3
 
-PODFILE CHECKSUM: 2710af85117f3f2356a2f6a851ee120bc359faa1
+PODFILE CHECKSUM: d6680d80641d07097b044a70337ae22d413af70d
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.8.4

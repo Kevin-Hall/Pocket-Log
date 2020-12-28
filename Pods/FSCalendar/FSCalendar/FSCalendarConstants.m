@@ -24,9 +24,23 @@ CGFloat const FSCalendarStandardSubtitleTextSize = 10;
 CGFloat const FSCalendarStandardWeekdayTextSize = 14;
 CGFloat const FSCalendarStandardHeaderTextSize = 16.5;
 CGFloat const FSCalendarMaximumEventDotDiameter = 4.8;
-CGFloat const FSCalendarStandardScopeHandleHeight = 26;
 
 NSInteger const FSCalendarDefaultHourComponent = 0;
+NSInteger const FSCalendarMaximumNumberOfEvents = 3;
 
 NSString * const FSCalendarDefaultCellReuseIdentifier = @"_FSCalendarDefaultCellReuseIdentifier";
+NSString * const FSCalendarBlankCellReuseIdentifier = @"_FSCalendarBlankCellReuseIdentifier";
 NSString * const FSCalendarInvalidArgumentsExceptionName = @"Invalid argument exception";
+
+CGPoint const CGPointInfinity = {
+    .x =  CGFLOAT_MAX,
+    .y =  CGFLOAT_MAX
+};
+
+CGSize const CGSizeAutomatic = {
+    .width =  FSCalendarAutomaticDimension,
+    .height =  FSCalendarAutomaticDimension
+};
+
+
+
